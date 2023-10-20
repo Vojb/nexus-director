@@ -1,20 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,  output: 'export',
+  swcMinify: true,
+  output: "export",
   modularizeImports: {
-    '@mui/icons-material': {
-      transform: '@mui/icons-material/{{member}}',
+    "@mui/icons-material": {
+      transform: "@mui/icons-material/{{member}}",
     },
   },
   images: {
-     unoptimized: true ,
+    unoptimized: true,
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'source.unsplash.com',
-        port: '',
-        pathname: '/random',
+        protocol: "https",
+        hostname: "source.unsplash.com",
+        port: "",
+        pathname: "/random",
       },
     ],
   },

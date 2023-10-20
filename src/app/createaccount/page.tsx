@@ -1,5 +1,5 @@
 "use client";
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useState } from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -8,62 +8,53 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import Image from "next/image";
 import mainLogo from "@/assets/logo-nexus.png";
-
-import { onAuthStateChanged } from "firebase/auth";
-
+import { initializeApp } from "firebase/app";
 import { useUserStore } from "@/datarepo/stores";
 import { useRouter } from "next/navigation";
-import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "@/datarepo/firebase";
 
-function LoginPage() {
-  const app = initializeApp(firebaseConfig);
+function CreateAccountPage() {
+  const [displayName, setDisplayName] = useState("");
 
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [errorSignIn, setErrorSignIn] = useState(false);
 
-  const auth = getAuth();
   const router = useRouter();
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
-        const uid = user.uid;
-        console.log(user, "user");
-        router.push("/dashboard");
-      } else {
-        // User is signed out
-        // ...
-      }
-    });
-  }, []);
 
   // Initialize Firebase Authentication and get a reference to the service
   const { username, setUsername: setUsernameWithEmail } = useUserStore();
-  const handleLogin = () => {
-    setUsernameWithEmail(userEmail);
-
-    signInWithEmailAndPassword(auth, userEmail, userPassword)
-      .then((userCredential) => {
-        // User logged in successfully
-        const user = userCredential.user;
-        console.log("User logged in:", user);
-      })
-      .catch((error) => {
-        setErrorSignIn(true);
-        // Handle login errors
-        console.error("Login error:", error);
-      });
+  const handleBack = () => {
+    router.back();
   };
 
   const handleCreateAccount = () => {
-    router.push("/createaccount");
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, userEmail, userPassword)
+      .then((userCredential) => {
+        // New user account created
+        const user = userCredential.user;
+        updateProfile(user, {
+          displayName: username,
+        })
+          .then(() => {
+            // Profile updated!
+            console.log("New user created:", user);
+
+            // ...
+          })
+          .catch((error) => {
+            // An error occurred
+            // ...
+          });
+      })
+      .catch((error) => {
+        // Handle account creation errors
+        console.error("Account creation error:", error);
+      });
   };
 
   return (
@@ -77,6 +68,19 @@ function LoginPage() {
         }}
       >
         <Image src={mainLogo} width={300} height={300} alt="Logo" />
+        <Typography typography={"h3"}>Create your account</Typography>
+        <TextField
+          sx={{ width: "80%" }}
+          margin="normal"
+          id="username"
+          label="Username"
+          error={errorSignIn}
+          variant="outlined"
+          value={displayName}
+          onChange={(event) => {
+            setDisplayName(event.target.value);
+          }}
+        />
         <TextField
           sx={{ width: "80%" }}
           margin="normal"
@@ -108,24 +112,24 @@ function LoginPage() {
             Wrong email or password.
           </Alert>
         )}
-        <Button
-          variant="contained"
-          sx={{ width: "80%", margin: 1 }}
-          onClick={handleLogin}
-        >
-          <Typography>Login </Typography>
-        </Button>
 
         <Button
-          variant="outlined"
+          variant="contained"
           sx={{ width: "80%", margin: 1 }}
           onClick={handleCreateAccount}
         >
           <Typography>Create account</Typography>
+        </Button>
+        <Button
+          variant="outlined"
+          sx={{ width: "80%", margin: 1 }}
+          onClick={handleBack}
+        >
+          <Typography>Back</Typography>
         </Button>
       </Box>
     </Container>
   );
 }
 
-export default LoginPage;
+export default CreateAccountPage;

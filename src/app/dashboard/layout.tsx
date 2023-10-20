@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import Link from "next/link";
 import AppBar from "@mui/material/AppBar";
@@ -19,13 +20,13 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import SupportIcon from "@mui/icons-material/Support";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
+import { getAuth, signOut } from "firebase/auth";
+import { firebaseConfig } from "@/datarepo/firebase";
+import { initializeApp } from "firebase/app";
+import { useRouter } from "next/router";
+import { useUserStore } from "@/datarepo/stores";
 
-export const metadata = {
-  title: "Next.js App Router + Material UI v5",
-  description: "Next.js App Router + Material UI v5",
-};
-
-const DRAWER_WIDTH = 240;
+const DRAWER_WIDTH = 160;
 
 const LINKS = [
   { text: "Starred", href: "/dashboard/starred", icon: StarIcon },
@@ -43,6 +44,19 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { username, id } = useUserStore();
+
+  // Handle the sign-out when the "Sign Out" link is clicked
+  const handleSignOut = () => {
+    const auth = getAuth();
+
+    signOut(auth)
+      .then(() => {})
+      .catch((error) => {
+        console.error("Sign-out error", error);
+      });
+  };
+
   return (
     <ThemeRegistry>
       <AppBar position="fixed" sx={{ zIndex: 2000 }}>
@@ -51,7 +65,7 @@ export default function DashboardLayout({
             sx={{ color: "#444", mr: 2, transform: "translateY(-2px)" }}
           />
           <Typography variant="h6" noWrap component="div" color="black">
-            Next.js App Router
+            User: {username}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -87,7 +101,9 @@ export default function DashboardLayout({
         <List>
           {PLACEHOLDER_LINKS.map(({ text, icon: Icon }) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton>
+              <ListItemButton
+                onClick={text === "Logout" ? handleSignOut : () => {}}
+              >
                 <ListItemIcon>
                   <Icon />
                 </ListItemIcon>

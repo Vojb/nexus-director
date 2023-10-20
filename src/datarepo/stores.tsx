@@ -1,11 +1,15 @@
-import { create } from 'zustand'
+import { create } from "zustand";
 
 type UserStore = {
-    username: string ,
-    setUsername: (name :string) => void,
-}
+  username: string;
+  id: string;
+  setId: (id: string) => void;
+  setUsername: (username: string) => void;
+};
 
-export const useUserStore  = create<UserStore>((set) => ({
-    username:"vojb",
-    setUsername: (string) => set((state) => ({ username: string })),
+export const useUserStore = create<UserStore>((set) => ({
+  username: "",
+  id: "",
+  setId: (string) => set((state) => ({ id: string })),
+  setUsername: (string) => set((state) => ({ username: string })),
 }));

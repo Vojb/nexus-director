@@ -1,29 +1,34 @@
 "use client";
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { Alert, Button, TextField } from "@mui/material";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
-import Image from "next/image";
-import mainLogo from "@/assets/logo-nexus.png";
+import { getAuth, onAuthStateChanged, updateProfile } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "@/datarepo/firebase";
-const app = initializeApp(firebaseConfig);
-
-import { useUserStore } from "@/datarepo/stores";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "@/datarepo/stores";
 
 function DashboardPage() {
-  return (
-    <Container>
-    
-    </Container>
-  );
+  const { setUsername, setId } = useUserStore();
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth();
+  const router = useRouter();
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const uid = user.uid;
+        if (user.displayName != null) {
+          setUsername(user.displayName);
+          setId(uid);
+        }
+      } else {
+        console.log("user should logout");
+        router.push("/");
+      }
+    });
+  }, []);
+
+  return <Container></Container>;
 }
 
 export default DashboardPage;

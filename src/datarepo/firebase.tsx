@@ -1,4 +1,4 @@
-
+import { initializeApp } from "firebase/app";
 import "firebase/auth";
 
 export const firebaseConfig = {
@@ -9,5 +9,5 @@ export const firebaseConfig = {
   storageBucket: "quizmaster-ab0ee.appspot.com",
   messagingSenderId: "648414065289",
   appId: "1:648414065289:web:bbce9153e4faf1c1d1cc58",
-  measurementId: "G-T5SKJQZ7Q5"
+  measurementId: "G-T5SKJQZ7Q5",
 };
