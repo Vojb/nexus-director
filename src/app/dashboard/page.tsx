@@ -20,6 +20,7 @@ function DashboardPage() {
         if (user.displayName != null) {
           setUsername(user.displayName);
           setId(uid);
+          console.log("user logged in");
         }
       } else {
         console.log("user should logout");

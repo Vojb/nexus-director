@@ -25,6 +25,11 @@ import { firebaseConfig } from "@/datarepo/firebase";
 import { initializeApp } from "firebase/app";
 import { useRouter } from "next/router";
 import { useUserStore } from "@/datarepo/stores";
+import StarredPage from "./starred/page";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
+import MenuIcon from "@mui/icons-material/Menu";
+import { Button, IconButton } from "@mui/material";
 
 const DRAWER_WIDTH = 160;
 
@@ -44,8 +49,56 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { username, id } = useUserStore();
+  const [state, setState] = React.useState({
+    left: false,
+  });
+  const [openDrawer, setOpenDrawer] = React.useState(false);
+  const { username } = useUserStore();
 
+  const toggleDrawer =
+    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === "keydown" &&
+        ((event as React.KeyboardEvent).key === "Tab" ||
+          (event as React.KeyboardEvent).key === "Shift")
+      ) {
+        return;
+      }
+      setState({ ...state, ["left"]: open });
+      setOpenDrawer(!open);
+    };
+
+  const list = () => (
+    <Box
+      sx={{
+        width: 180,
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+      }}
+      role="presentation"
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+    >
+      <Divider />
+      <List>
+        {LINKS.map(({ text, href, icon: Icon }) => (
+          <ListItem key={href} disablePadding>
+            <ListItemButton component={Link} href={href}>
+              <ListItemIcon>
+                <Icon />
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider sx={{ mt: "auto" }} />
+      <Button onClick={handleSignOut}>
+        <Typography>Logout</Typography>
+      </Button>
+    </Box>
+  );
   // Handle the sign-out when the "Sign Out" link is clicked
   const handleSignOut = () => {
     const auth = getAuth();
@@ -59,66 +112,41 @@ export default function DashboardLayout({
 
   return (
     <ThemeRegistry>
-      <AppBar position="fixed" sx={{ zIndex: 2000 }}>
-        <Toolbar sx={{ backgroundColor: "background.paper" }}>
-          <DashboardIcon
-            sx={{ color: "#444", mr: 2, transform: "translateY(-2px)" }}
-          />
-          <Typography variant="h6" noWrap component="div" color="black">
-            User: {username}
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        sx={{
-          width: DRAWER_WIDTH,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: DRAWER_WIDTH,
-            boxSizing: "border-box",
-            top: ["48px", "56px", "64px"],
-            height: "auto",
-            bottom: 0,
-          },
-        }}
-        variant="permanent"
-        anchor="left"
-      >
-        <Divider />
-        <List>
-          {LINKS.map(({ text, href, icon: Icon }) => (
-            <ListItem key={href} disablePadding>
-              <ListItemButton component={Link} href={href}>
-                <ListItemIcon>
-                  <Icon />
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider sx={{ mt: "auto" }} />
-        <List>
-          {PLACEHOLDER_LINKS.map(({ text, icon: Icon }) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton
-                onClick={text === "Logout" ? handleSignOut : () => {}}
-              >
-                <ListItemIcon>
-                  <Icon />
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+      <React.Fragment key={"left"}>
+        <AppBar position="fixed" sx={{ zIndex: 2000 }}>
+          <Toolbar>
+            <IconButton onClick={toggleDrawer(openDrawer)}>
+              <MenuIcon />
+            </IconButton>
+
+            <Typography variant="h6" noWrap component="div" color="black">
+              User: {username}
+            </Typography>
+          </Toolbar>
+        </AppBar>
+
+        <Drawer
+          sx={{
+            flexShrink: 0,
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              top: ["48px", "56px", "64px"],
+              height: "auto",
+              bottom: 0,
+            },
+          }}
+          anchor={"left"}
+          open={state["left"]}
+          onClose={toggleDrawer(!openDrawer)}
+        >
+          {list()}
+        </Drawer>
+      </React.Fragment>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           bgcolor: "background.default",
-          ml: `${DRAWER_WIDTH}px`,
           mt: ["48px", "56px", "64px"],
           p: 3,
         }}
