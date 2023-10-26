@@ -1,17 +1,11 @@
 /** @type {import('next').NextConfig} */
-const withPWA = require("next-pwa");
-module.exports = withPWA({
-  pwa: {
-    dest: "out",
-    register: true,
-    disable: process.env.NODE_ENV === "development",
-    skipWaiting: true,
-  },
+const withPWA = require("next-pwa")({
+  dest: "public",
 });
-const nextConfig = {
+
+const nextConfig = withPWA({
   reactStrictMode: true,
   swcMinify: true,
-  output: "export",
   modularizeImports: {
     "@mui/icons-material": {
       transform: "@mui/icons-material/{{member}}",
@@ -28,6 +22,6 @@ const nextConfig = {
       },
     ],
   },
-};
+});
 
 module.exports = nextConfig;
