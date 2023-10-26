@@ -10,10 +10,18 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "@/datarepo/firebase";
+import { Inter } from "next/font/google";
+import { Metadata } from "next";
 
-export const metadata = {
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
   title: "Nexus Director",
-  description: "Quiz management app",
+  description: "Nexus Director",
+  manifest: "/manifest.json",
+  viewport: "width=device-width, initial-scale=1",
+  icons: ["/favicon.ico"],
+  themeColor: "#ffffff",
 };
 
 export default function RootLayout({
