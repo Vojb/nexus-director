@@ -24,7 +24,6 @@ import { getAuth, signOut } from "firebase/auth";
 import { firebaseConfig } from "@/datarepo/firebase";
 import { useRouter } from "next/router";
 import { useUserStore } from "@/datarepo/stores";
-import StarredPage from "./starred/page";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -33,7 +32,7 @@ import { Button, IconButton } from "@mui/material";
 const DRAWER_WIDTH = 160;
 
 const LINKS = [
-  { text: "Starred", href: "/dashboard/starred", icon: StarIcon },
+  { text: "Questions", href: "/dashboard/questions", icon: StarIcon },
   { text: "Tasks", href: "/dashboard/tasks", icon: ChecklistIcon },
 ];
 
@@ -51,7 +50,7 @@ export default function DashboardLayout({
   const [state, setState] = React.useState({
     left: false,
   });
-  const [openDrawer, setOpenDrawer] = React.useState(false);
+  const [openDrawer, setOpenDrawer] = React.useState(true);
   const { username } = useUserStore();
 
   const toggleDrawer =
@@ -117,10 +116,6 @@ export default function DashboardLayout({
             <IconButton onClick={toggleDrawer(openDrawer)}>
               <MenuIcon />
             </IconButton>
-
-            <Typography variant="h6" noWrap component="div" color="black">
-              User: {username}
-            </Typography>
           </Toolbar>
         </AppBar>
 

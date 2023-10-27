@@ -18,7 +18,6 @@ function DashboardPage() {
         if (user.displayName != null) {
           setUsername(user.displayName);
           setId(uid);
-          router.push("/");
           console.log("user logged in");
         }
       } else {
