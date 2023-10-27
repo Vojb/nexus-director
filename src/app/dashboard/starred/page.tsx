@@ -30,15 +30,18 @@ export default function StarredPage() {
       >
         <Typography variant="h4">Questions ({questions.length})</Typography>
         <List>
-          {questions.map((question, index) => (
-            <ListItem key={index}>
-              <Box>
-                <Typography>QuestionType :{question.questionType}</Typography>
-                <Typography>Answer: {question.answer} </Typography>
-                <Typography>hej</Typography>
-              </Box>
-            </ListItem>
-          ))}
+          {questions.map((question, index) => {
+            console.log(question, "question");
+            return (
+              <ListItem key={index}>
+                <Box>
+                  <Typography>QuestionType :{question.questionType}</Typography>
+                  <Typography>Answer: {question.answer} </Typography>
+                  <Typography>hej</Typography>
+                </Box>
+              </ListItem>
+            );
+          })}
         </List>
       </Box>
     </Container>
