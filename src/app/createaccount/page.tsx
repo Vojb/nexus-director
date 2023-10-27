@@ -12,7 +12,6 @@ import {
 } from "firebase/auth";
 import Image from "next/image";
 import mainLogo from "@/assets/logo-nexus.png";
-import { initializeApp } from "firebase/app";
 import { useUserStore } from "@/datarepo/stores";
 import { useRouter } from "next/navigation";
 
@@ -24,8 +23,6 @@ function CreateAccountPage() {
   const [errorSignIn, setErrorSignIn] = useState(false);
 
   const router = useRouter();
-
-  // Initialize Firebase Authentication and get a reference to the service
   const { username, setUsername: setUsernameWithEmail } = useUserStore();
   const handleBack = () => {
     router.back();

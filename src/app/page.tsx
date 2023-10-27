@@ -44,7 +44,6 @@ function LoginPage() {
     });
   }, []);
 
-  // Initialize Firebase Authentication and get a reference to the service
   const { username, setUsername: setUsernameWithEmail } = useUserStore();
   const handleLogin = () => {
     setUsernameWithEmail(userEmail);

@@ -6,10 +6,8 @@ import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "@/datarepo/firebase";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/datarepo/stores";
-
 function DashboardPage() {
   const { setUsername, setId } = useUserStore();
-
   const app = initializeApp(firebaseConfig);
   const auth = getAuth();
   const router = useRouter();

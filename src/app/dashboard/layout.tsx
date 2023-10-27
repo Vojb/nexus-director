@@ -22,7 +22,6 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
 import { getAuth, signOut } from "firebase/auth";
 import { firebaseConfig } from "@/datarepo/firebase";
-import { initializeApp } from "firebase/app";
 import { useRouter } from "next/router";
 import { useUserStore } from "@/datarepo/stores";
 import StarredPage from "./starred/page";
@@ -71,7 +70,7 @@ export default function DashboardLayout({
   const list = () => (
     <Box
       sx={{
-        width: 180,
+        width: 200,
         display: "flex",
         flexDirection: "column",
         height: "100%",
