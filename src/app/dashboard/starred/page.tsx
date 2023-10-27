@@ -35,7 +35,7 @@ export default function StarredPage() {
               <Box>
                 <Typography>QuestionType :{question.questionType}</Typography>
                 <Typography>Answer: {question.answer} </Typography>
-                <Typography></Typography>
+                <Typography>hej</Typography>
               </Box>
             </ListItem>
           ))}

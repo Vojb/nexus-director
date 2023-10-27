@@ -31,7 +31,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body style={{ overscrollBehaviorY: "contain" }}>
         <ThemeRegistry>{children}</ThemeRegistry>
       </body>
     </html>
